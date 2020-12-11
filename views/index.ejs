@@ -1,0 +1,8 @@
+<%- include('./partials/header.ejs') %>
+<h1>News</h1>
+<ul>
+  <% news.forEach((n) => { %>
+    <li><a href='/news/<%= n.id %>'><%= n.title %></a></li>
+  <% }); %>
+</ul>
+<%- include('./partials/footer.ejs') %>

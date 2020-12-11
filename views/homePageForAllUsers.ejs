@@ -1,0 +1,27 @@
+<%- include('./partials/header.ejs') %>
+    <div class='container-fluid'>
+    <div class="wrapper">
+        <p class='lead'>This is the application for tracking the quality of life. Report the basic habits and see how you have been living so far. We will show you a summary and also give you a estimate of how you are feeling compared to yesterday.</p>
+
+        <% if (!userEmail) { %>
+            <p class='lead font-weight-bold'>Register or login to use the application</p>
+            <a href='/auth/register' class='badge badge-secondary big-link'>Register</a>
+            <a href='/auth/login' class='badge badge-secondary big-link'>Login</a>
+        <% } else { %>
+            <p class='h5 font-weight-bold'>Mood Trend</h2>
+            <p class='h6'>Mood Today: <%= mToday %></p>
+            <p class='h6'>Mood Yesterday: <%= mYesterday %></p>
+            <p class='h6'>Mood Trend: <%= trend %></p>
+
+            <div class='more-space-above'>
+            <a href="/behaviour/reporting" class='badge badge-secondary big-link'>See Behaviour Reports</a>
+            <a href="/report-morning" class='badge badge-secondary big-link'>Add Morning data</a>
+            <a href="/report-evening" class='badge badge-secondary big-link'>Add Evening data</a>
+            <a href="/behaviour/summary" class='badge badge-secondary big-link'>See report summaries</a>
+            </div>
+        <% } %>
+    </div>
+    </div>
+
+
+<%- include('./partials/footer.ejs') %>

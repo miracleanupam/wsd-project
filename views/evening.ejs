@@ -1,0 +1,62 @@
+<%- include('./partials/header.ejs') %>
+<div class="container-fluid">
+<div class="wrapper">
+    <h1>Report evening behavior:</h1>
+    <% if (errors) { %>
+        <ul>
+            <% Object.keys(errors).forEach((attribute) => { %>
+                <% Object.values(errors[attribute]).forEach((err) => { %>
+                    <li><%= err %></li>
+                <% }); %>
+            <% }); %>
+        </ul>
+    <% } %>
+    <form method="POST" action="/report-evening">
+        <div class="form-group">
+            <label for="report_for">Reporting Date:</label>
+            <input class="form-control" type="date" id="report_for" name="report_for" value="<%= defaultEveningData.reportFor ? defaultEveningData.reportFor : (new Date()).toISOString().split('T')[0] %>" required /><br/>
+            <label for="sports_hours">Time spent on sports and exercise in Hours (For eg: 5 or 5.3):</label>
+            <input class="form-control" type="number" step="any" min="0" id="sports_hours" name="sports_hours" value="<%= defaultEveningData.sportsHours %>" required /><br/>
+            <label for="study_hours">Time spent studying in Hours (For eg: 5 or 5.3):</label>
+            <input class="form-control" type="number" step="any" min="0" id="study_hours" name="study_hours" value="<%= defaultEveningData.studyHours %>" required /><br/>
+
+            <p>Regularity and quality of eating:</p>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="eating_quality1" name="eating_quality" value="1" <%= defaultEveningData.eatingQuality === 1 ? 'checked' : '' %> /><label for="eating_quality1">1</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="eating_quality2" name="eating_quality" value="2" <%= defaultEveningData.eatingQuality === 2 ? 'checked' : '' %> /><label for="eating_quality2">2</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="eating_quality3" name="eating_quality" value="3" <%= defaultEveningData.eatingQuality === 3 ? 'checked' : '' %> /><label for="eating_quality3">3</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="eating_quality4" name="eating_quality" value="4" <%= defaultEveningData.eatingQuality === 4 ? 'checked' : '' %> /><label for="eating_quality4">4</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="eating_quality5" name="eating_quality" value="5" <%= defaultEveningData.eatingQuality === 5 ? 'checked' : '' %> /><label for="eating_quality5">5</label>
+            </div>
+
+            <p>Generic Mood:</p>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood1" name="mood" value="1" <%= defaultEveningData.mood === 1 ? 'checked' : '' %> /><label for="mood1">1</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood2" name="mood" value="2" <%= defaultEveningData.mood === 2 ? 'checked' : '' %> /><label for="mood2">2</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood3" name="mood" value="3" <%= defaultEveningData.mood === 3 ? 'checked' : '' %> /><label for="mood3">3</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood4" name="mood" value="4" <%= defaultEveningData.mood === 4 ? 'checked' : '' %> /><label for="mood4">4</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood5" name="mood" value="5" <%= defaultEveningData.mood === 5 ? 'checked' : '' %> /><label for="mood5">5</label>
+            </div>
+
+            <input type="submit" value="Submit" class="btn btn-secondary" />
+        </div>
+    </form>
+</div>
+</div>
+<%- include('./partials/footer.ejs') %>

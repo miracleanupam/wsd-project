@@ -1,0 +1,43 @@
+<%- include('./partials/header.ejs') %>
+<div class="container-fluid">
+<div class="wrapper">
+    <p class='h2'>This is the summary of habits</p>
+    <p class='lead font-weight-bold'>Summary of last seven days</p>
+    <ul class="list-group">
+        <li class="list-group-item">Average Sleep Hours: <%= avgLastWeek.avg_sleep %></li>
+        <li class="list-group-item">Average Sleep Quality: <%= avgLastWeek.avg_sleep_quality %></li>
+        <li class="list-group-item">Average Sports Hours: <%= avgLastWeek.avg_sports %></li>
+        <li class="list-group-item">Average Study Hours: <%= avgLastWeek.avg_study %></li>
+        <li class="list-group-item">Average Eating Quality: <%= avgLastWeek.avg_eating %></li>
+        <li class="list-group-item">Average Mood: <%= avgLastWeek.avg_mood %></li>
+    </ul>
+
+    <p class='lead font-weight-bold space-above'>Summary of last thirty days</p>
+    <ul class="list-group">
+        <li class="list-group-item">Average Sleep Hours: <%= avgLastMonth.avg_sleep %></li>
+        <li class="list-group-item">Average Sleep Quality: <%= avgLastMonth.avg_sleep_quality %></li>
+        <li class="list-group-item">Average Sports Hours: <%= avgLastMonth.avg_sports %></li>
+        <li class="list-group-item">Average Study Hours: <%= avgLastMonth.avg_study %></li>
+        <li class="list-group-item">Average Eating Quality: <%= avgLastMonth.avg_eating %></li>
+        <li class="list-group-item">Average Mood: <%= avgLastMonth.avg_mood %></li>
+    </ul>
+
+    <p class='h2 space-above'>Select a week or month to see the summary of that week/month</p>
+    <form method="POST" action="/behaviour/summary/week">
+    <div class="form-group">
+        <label for="week_no">Select Week</label>
+        <input type="week" class="form-control" name="week_no" />
+        <input type="submit" value="Go" class="btn btn-secondary space-above" />
+    </div>
+    </form>
+    <form method="POST" action="/behaviour/summary/month">
+    <div class="form-group">
+        <label for="month_no">Select Month</label>
+        <input type="month" class="form-control" name="month_no" />
+        <input type="submit" value="Go" class="btn btn-secondary space-above" />
+    </div>
+    </form>
+</div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

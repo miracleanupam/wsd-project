@@ -1,0 +1,29 @@
+<%- include('./partials/header.ejs') %>
+    <div class='container-fluid'>
+    <div class='wrapper'>
+    <p class='lead font-weight-bold'>Login!</p>
+    <form method="POST">
+        <div class='form-group'>
+        <label for="email">Email: </label>
+        <input type="email" name="email" class="form-control" />
+        <label for="password">Password: </label>
+        <input type="password" name="password" class="form-control" />
+        <input type="submit" value="Submit!" class="btn btn-secondary space-above" />
+        </div>
+    </form>
+    <% if (errors) { %>
+    <ul>
+        <% Object.keys(errors).forEach((attribute) => { %>
+            <% Object.values(errors[attribute]).forEach((err) => { %>
+                <li><%= err %></li>
+            <% }); %>
+        <% }); %>
+    </ul>
+
+    <p class='lead font-weight-bold'>Don't have an account yet?</p>
+    <a href='/auth/register' class='badge badge-secondary big-link'>Register<a>
+<% } %>
+    </div>
+    </div>
+
+<%- include('./partials/footer.ejs') %>

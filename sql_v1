@@ -1,0 +1,143 @@
+--statement to store the email and passwords of the users
+create table users (
+	id serial primary key,
+	email varchar(320) not null,
+	"password" char(60) not null,
+);
+
+--statement for creating the table to store data for mornings
+CREATE TABLE reportings_morning (
+	id serial PRIMARY KEY,
+	report_for date NOT NULL,
+	user_id integer REFERENCES users(id),
+	sleep_hours REAL,
+	sleep_quality integer,
+	mood integer
+);
+
+--unique index on two columns (report_for, user_id) so that there is only row set of data for each day for each user
+create unique index morn_index on reportings_morning (report_for, user_id);
+
+--statement for creating the table to store data for evenings
+create table reportings_evening (
+	id serial primary key,
+	report_for date not null,
+	user_id integer references users(id),
+	sports_hours real,
+	study_hours real,
+	eating_quality integer,
+	mood integer
+--	unique(report_for, user_id)
+);
+
+--similar to the index above but for this table
+create unique index eve_index on reportings_evening (report_for, user_id);
+
+--example statement to insert or update the data in reportings_morning
+--looks for conflict on columns (report_for, user_id) which we have indexed
+--this design simplifies the coding aspects as we don't need to write separate code 
+--for update of the data
+insert into reportings_morning as rp (report_for, user_id, sleep_hours, sleep_quality, mood) values ('2020-11-30', 1, 5, 5, 5) on conflict (report_for, user_id) 
+	do update 
+		set 
+			sleep_quality=coalesce(excluded.sleep_quality, rp.sleep_quality),
+			sleep_hours=coalesce(excluded.sleep_hours, rp.sleep_hours),
+			mood=coalesce(excluded.mood, rp.mood)
+;
+
+--similary for table reportings_evening
+insert into reportings_evening as re (report_for, user_id, study_hours, sports_hours, eating_quality, mood) values ('2020-12-11', 1, 1, 1, 1, 1) on conflict (report_for, user_id)
+	do update 
+		set
+			study_hours=coalesce(excluded.study_hours, re.study_hours),
+			sports_hours=coalesce(excluded.sports_hours, re.sports_hours),
+			eating_quality=coalesce(excluded.eating_quality, re.eating_quality),
+			mood=coalesce(excluded.mood, re.mood)
+;
+
+
+--Basic query for getting all the required data from two tables as one
+--this will combine the two tables in one result on which we can further do queries
+--change the user_id as needed
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1;
+
+
+
+--Query to get summarized data for a user for the last 7 days
+--Changing the interval to 30 days will give the summarized data for last 30 days
+with base_data as (
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1
+) select round(avg(sports_hours)::decimal, 2) as avg_sports, round(avg(study_hours)::decimal, 2) as avg_study, round(avg(sleep_hours)::decimal, 2) as avg_sleep,
+round(avg(sleep_quality)::decimal, 2) as avg_sleep_quality,
+round(avg(eating_quality), 2) as avg_eating,
+case
+	when count(morn_mood) + count(eve_mood) = 0 then 0
+	else round((sum(morn_mood) + sum(eve_mood))::decimal / (count(morn_mood) + count(eve_mood))::decimal, 2)
+end
+as avg_mood from base_data where report_for between now() - interval '7 days' and now();
+
+
+--Statement to get average mood for a user for a day
+with base_data as (
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1
+) select *, (morn_mood + eve_mood)::decimal / 2 as avg_mood
+from base_data where report_for='2020-12-06';
+
+
+--Statement to get moood trend for a user, comparing the moods for today and yesterday is not done in db
+with base_data as (
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1
+) select report_for, (coalesce(morn_mood, 0) + coalesce(eve_mood, 0))::decimal / 2 as avg_mood
+from base_data where report_for between current_date - interval '1 days' and current_date order by report_for;
+
+
+--Check reporting for today is done or not
+--Check for today's reports
+select (select count(*) from reportings_morning rm where report_for = current_date) as count_morn, (select count(*) from reportings_evening re where report_for = current_date) as count_eve;
+--check of yesterday's reports
+select (select count(*) from reportings_morning rm where report_for = current_date - interval '1 day') as count_morn, (select count(*) from reportings_evening re where report_for = current_date - interval '1 day') as count_eve;
+	
+
+--Query to get the summary for a given week
+with base_data as (
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1
+) select round(avg(sports_hours)::decimal, 2) as avg_sports, round(avg(study_hours)::decimal, 2) as avg_study, round(avg(sleep_hours)::decimal, 2) as avg_sleep,
+round(avg(sleep_quality)::decimal, 2) as avg_sleep_quality,
+round(avg(eating_quality), 2) as avg_eating,
+case
+	when count(morn_mood) + count(eve_mood) = 0 then 0
+	else round((sum(morn_mood) + sum(eve_mood))::decimal / (count(morn_mood) + count(eve_mood))::decimal, 2)
+end
+as avg_mood from base_data where extract(week from report_for) = 49 and extract(year from report_for) = 2020;
+
+
+--Query to get the summary for a given month
+with base_data as (
+select rm.user_id, coalesce(rm.report_for, re.report_for) as report_for, sports_hours, study_hours, eating_quality , rm.mood as morn_mood,
+sleep_hours, sleep_quality, re.mood as eve_mood 
+from reportings_evening re full outer join reportings_morning rm on re.report_for  = rm.report_for 
+where re.user_id = 1 or rm.user_id =1
+) select round(avg(sports_hours)::decimal, 2) as avg_sports, round(avg(study_hours)::decimal, 2) as avg_study, round(avg(sleep_hours)::decimal, 2) as avg_sleep,
+round(avg(sleep_quality)::decimal, 2) as avg_sleep_quality,
+round(avg(eating_quality), 2) as avg_eating,
+case
+	when count(morn_mood) + count(eve_mood) = 0 then 0
+	else round((sum(morn_mood) + sum(eve_mood))::decimal / (count(morn_mood) + count(eve_mood))::decimal, 2)
+end
+as avg_mood from base_data where extract(month from report_for) = 12 and extract(year from report_for) = 2020;
+

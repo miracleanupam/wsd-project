@@ -1,0 +1,25 @@
+<%- include('./partials/header.ejs') %>
+<div class="container-fluid">
+<div class="wrapper">
+    <p class='lead font-weight-bold'>This is summary of week <%= weekNo %> of year <%= year %>!</p>
+    <% if (errors) { %>
+        <ul class="list-group">
+            <% Object.keys(errors).forEach((attribute) => { %>
+                <% Object.values(errors[attribute]).forEach((err) => { %>
+                    <li class="list-group-item"><%= err %></li>
+                <% }); %>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <ul class="list-group">
+            <li class="list-group-item">Average Sleep Hours: <%= summaryData.avg_sleep %></li>
+            <li class="list-group-item">Average Sleep Quality: <%= summaryData.avg_sleep_quality %></li>
+            <li class="list-group-item">Average Sports Hours: <%= summaryData.avg_sports %></li>
+            <li class="list-group-item">Average Study Hours: <%= summaryData.avg_study %></li>
+            <li class="list-group-item">Average Eating Quality: <%= summaryData.avg_eating %></li>
+            <li class="list-group-item">Average Mood: <%= summaryData.avg_mood %></li>
+        </ul>
+    <% } %>
+</div>
+</div>
+<%- include('./partials/footer.ejs') %>

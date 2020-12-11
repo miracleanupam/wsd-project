@@ -1,0 +1,28 @@
+.container-fluid {
+    padding: 0 0 0 0;
+}
+
+
+.wrapper {
+    padding: 15px;
+}
+
+.stong {
+    font-weight: bold;
+}
+
+.big-link {
+    font-size: 1.5rem;
+}
+
+.space-above {
+    margin-top: 5px;
+}
+
+.more-space-above {
+    margin-top: 15px;
+}
+
+.more-space-below {
+    margin-bottom: 15px;
+}

@@ -1,0 +1,60 @@
+<%- include('./partials/header.ejs') %>
+<div class="container-fluid">
+<div class="wrapper">
+    <p class='lead font-weight-bold'>Report morning behavior:</p>
+    <% if (errors) { %>
+        <ul>
+            <% Object.keys(errors).forEach((attribute) => { %>
+                <% Object.values(errors[attribute]).forEach((err) => { %>
+                    <li><%= err %></li>
+                <% }); %>
+            <% }); %>
+        </ul>
+    <% } %>
+    <form method="POST" action="/report-morning">
+        <div class='form-group'>
+            <label for="report_for">Reporting Date:</label>
+            <input class='form-control' type="date" id="report_for" name="report_for" value="<%= defaultMornData.reportFor ? defaultMornData.reportFor : (new Date()).toISOString().split('T')[0] %>" required />
+            <label for="sleep_hours">Sleep Duration In Hours (For eg: 5 or 5.4):</label>
+            <input class='form-control' type="number" step="any" min="0" id="sleep_hours" name="sleep_hours" value="<%= defaultMornData.sleepHours %>" required />
+            
+            <p>Sleep Quality:</p>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="sleep_quality1" name="sleep_quality" value="1" <%= defaultMornData.sleepQuality === 1 ? 'checked' : '' %> /><label for="sleep_quality1">1</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="sleep_quality2" name="sleep_quality" value="2" <%= defaultMornData.sleepQuality === 2 ? 'checked' : '' %> /><label for="sleep_quality2">2</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="sleep_quality3" name="sleep_quality" value="3" <%= defaultMornData.sleepQuality === 3 ? 'checked' : '' %> /><label for="sleep_quality3">3</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="sleep_quality4" name="sleep_quality" value="4" <%= defaultMornData.sleepQuality === 4 ? 'checked' : '' %> /><label for="sleep_quality4">4</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="sleep_quality5" name="sleep_quality" value="5" <%= defaultMornData.sleepQuality === 5 ? 'checked' : '' %> /><label for="sleep_quality5">5</label>
+            </div>
+
+            <p>Generic Mood:</p>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood1" name="mood" value="1" <%= defaultMornData.mood === 1 ? 'checked' : '' %> /><label for="mood1">1</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood2" name="mood" value="2" <%= defaultMornData.mood === 2 ? 'checked' : '' %> /><label for="mood2">2</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood3" name="mood" value="3" <%= defaultMornData.mood === 3 ? 'checked' : '' %> /><label for="mood3">3</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood4" name="mood" value="4" <%= defaultMornData.mood === 4 ? 'checked' : '' %> /><label for="mood4">4</label>
+            </div>
+            <div class="form-check">
+            <input type="radio" class="form-check-input" id="mood5" name="mood" value="5" <%= defaultMornData.mood === 5 ? 'checked' : '' %> /><label for="mood5">5</label>
+            </div>
+
+            <input type="submit" value="Submit" class="btn btn-secondary" />
+            </div>
+        </form>
+</div>
+</div>
+<%- include('./partials/footer.ejs') %>

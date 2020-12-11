@@ -1,0 +1,18 @@
+<%- include('./partials/header.ejs') %>
+<div class="container-fluid">
+<div class="wrapper">
+    <p class="h3">Report Your Data</p>
+    <a href='/report-morning' class='badge badge-secondary big-link'>Morning</a>
+    <a href='/report-evening' class='badge badge-secondary big-link'>Evening</a>
+
+    <p class="h6 more-space-above">NB! If you report the data for the time you have have already reported the data for again, the old data will be overwritten. </p>
+    <div class="more-space-above">
+    <p class="h4">Today's status</p>
+    <p class='lead'>You have reported data for morning today: <span class='font-weight-bold'> <%= hasReportedIn.morning %> </span></p>
+    <p class='lead'>You have reported data for evening today: <span class='font-weight-bold'> <%= hasReportedIn.evening %> </span></p>
+    </div>
+
+    <a href="/behaviour/summary" class="badge badge-secondary big-link">See report summaries</a>
+</div>
+</div>
+<%- include('./partials/footer.ejs') %>
