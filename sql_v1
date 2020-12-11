@@ -2,7 +2,7 @@
 create table users (
 	id serial primary key,
 	email varchar(320) not null,
-	"password" char(60) not null,
+	"password" char(60) not null
 );
 
 --statement for creating the table to store data for mornings
@@ -27,7 +27,6 @@ create table reportings_evening (
 	study_hours real,
 	eating_quality integer,
 	mood integer
---	unique(report_for, user_id)
 );
 
 --similar to the index above but for this table
