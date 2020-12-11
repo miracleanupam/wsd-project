@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  deno:
+    image: ad/deno
+    restart: always
+    environment:
+      PGPORT: 5432
+      PGDATABASE: webdev
+      PGHOST: db
+      PGUSER: dbuser
+      PGPASSWORD: password
+      # TEST_ENVIRONMENT: 'true'
+    # This is needed
+    volumes:
+      - /directory/where/the/source/code/is:/app
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "7777:7777"
+    command: deno run --unstable --watch --allow-env --allow-read --allow-write --allow-net app.js
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: dbuser
+      POSTGRES_DB: webdev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    # Change this or remove the volumes part altogether
+    volumes:
+      - /home/anupam/Aalto/WebDev/middleware/db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

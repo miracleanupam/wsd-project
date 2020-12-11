@@ -90,7 +90,7 @@ There are test cases written to test the functionality of the app. Testing can b
 1. Build the docker image
       docker build -t ad/deno .
 2. Change the environment variables for database credentials in docker-compose.yaml file. Change the host directory to where the source code is in line 14. So, it should be the direcotry where the project is cloned to.
-3. Change/Remove the lines 18 and 19.
+3. Change/Remove the lines 32 and 33
 4. Run docker-compose up
 
 ## Live Website
