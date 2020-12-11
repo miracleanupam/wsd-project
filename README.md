@@ -86,7 +86,12 @@ Bootstrap Framework has been used to style the web pages in uniform way.
 ## Testing
 There are test cases written to test the functionality of the app. Testing can be done by staring the runtime environment mode using environment variables to feed the database credentials. Or, the credentials can also be supplied in config.js file.
 
-
+## Instruction for running
+1. Build the docker image
+      docker build -t ad/deno .
+2. Change the environment variables for database credentials in docker-compose.yaml file. Change the host directory to where the source code is in line 14. So, it should be the direcotry where the project is cloned to.
+3. Change/Remove the lines 18 and 19.
+4. Run docker-compose up
 
 ## Live Website
 [Heroku Site](https://wsd-anupam.herokuapp.com/)
